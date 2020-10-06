@@ -1,4 +1,4 @@
-// Book Class
+//   BOOK CLASS   /////////
 class Book {
   constructor(title, author, id) {
     this.title = title;
@@ -7,24 +7,32 @@ class Book {
   }
 }
 
-// Storage class
+//   STORAGE CLASS   /////////
+class Storage {
+  static dispalyBooks() {
+    let books;
+    if (localStorage.getItem('books') === null) books = [];
+    else books = JSON.parse(localStorage.getItem('books'));
+    return books;
+  }
 
-// UI Class
+  static addBook(book) {
+    const books = this.dispalyBooks();
+    books.push(book);
+    localStorage.setItem('books', JSON.stringify(books));
+  }
+
+  static removeBook(bookId) {
+    let books = this.dispalyBooks();
+    books = books.filter(book => book.id !== bookId);
+    localStorage.setItem('books', JSON.stringify(books));
+  }
+}
+
+//   UI CLASS   /////////
 class UI {
   static displayBooks() {
-    const booksStorage = [
-      {
-        title: 'JavaScript for beginers',
-        author: 'Bred Miles',
-        id: 54321,
-      },
-      {
-        title: 'Python in DataScience',
-        author: 'Ted Baker',
-        id: 9876,
-      },
-    ];
-    const books = booksStorage;
+    const books = Storage.dispalyBooks();
     books.forEach(book => UI.addBookToList(book));
   }
 
@@ -71,11 +79,11 @@ class UI {
   }
 }
 
-// Events
-// Show all books
+//         EVENTS         /////////////////
+// SHOW ALL BOOKS
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
 
-// Add a book
+// ADD BOOK
 document.querySelector('#book-form').addEventListener('submit', evt => {
   evt.preventDefault();
 
@@ -88,12 +96,15 @@ document.querySelector('#book-form').addEventListener('submit', evt => {
   } else {
     const book = new Book(title, author, bookId);
     UI.addBookToList(book);
+    Storage.addBook(book);
     UI.showAlert('Added to book list!', 'success');
     UI.clearForm();
   }
 });
 
-// Remove book
-document
-  .querySelector('#book-list')
-  .addEventListener('click', evt => UI.deleteBook(evt.target));
+// REMOVE BOOK
+document.querySelector('#book-list').addEventListener('click', evt => {
+  let currBookId = evt.target.parentElement.previousElementSibling.textContent;
+  Storage.removeBook(currBookId);
+  UI.deleteBook(evt.target);
+});
