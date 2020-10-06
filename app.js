@@ -61,3 +61,11 @@ document.querySelector('#book-form').addEventListener('submit', evt => {
 });
 
 // Remove book
+document.querySelector('#book-list').addEventListener('click', evt => {
+  if (evt.target.classList.contains('delete')) {
+    if (confirm('Do you want to delete this book?')) {
+      const toRemoveElem = evt.target.parentElement.parentElement;
+      toRemoveElem.remove();
+    }
+  }
+});
