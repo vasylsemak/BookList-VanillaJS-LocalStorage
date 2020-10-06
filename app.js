@@ -24,7 +24,6 @@ class UI {
         id: 9876,
       },
     ];
-
     const books = booksStorage;
     books.forEach(book => UI.addBookToList(book));
   }
@@ -39,11 +38,18 @@ class UI {
         <a href="#" class="btn btn-sm btn-danger delete">X</a>
       </td>
     `;
-
     document.querySelector('#book-list').appendChild(tr);
   }
 
-  // Clear Form
+  static deleteBook(evt) {
+    if (evt.target.classList.contains('delete')) {
+      if (confirm('Do you want to delete this book?')) {
+        const toRemoveElem = evt.target.parentElement.parentElement;
+        toRemoveElem.remove();
+      }
+    }
+  }
+
   static clearForm() {
     document.getElementById('title').value = '';
     document.getElementById('author').value = '';
@@ -73,11 +79,4 @@ document.querySelector('#book-form').addEventListener('submit', evt => {
 });
 
 // Remove book
-document.querySelector('#book-list').addEventListener('click', evt => {
-  if (evt.target.classList.contains('delete')) {
-    if (confirm('Do you want to delete this book?')) {
-      const toRemoveElem = evt.target.parentElement.parentElement;
-      toRemoveElem.remove();
-    }
-  }
-});
+document.querySelector('#book-list').addEventListener('click', UI.deleteBook);
