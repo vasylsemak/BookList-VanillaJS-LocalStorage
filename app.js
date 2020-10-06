@@ -63,7 +63,10 @@ class UI {
     // create alert node
     const alert = document.createElement('div');
     alert.className = `alert alert-${type}`;
-    alert.appendChild(document.createTextNode(message));
+    alert.style.textAlign = 'center';
+    alert.style.fontSize = '1.5rem';
+    const text = document.createTextNode(message);
+    alert.appendChild(text);
     // insert alert node
     const form = document.querySelector('#book-form');
     const button = document.querySelector('input[type="submit"]');
